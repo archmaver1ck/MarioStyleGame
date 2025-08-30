@@ -1,7 +1,11 @@
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    scale: {
+        mode: Phaser.Scale.FIT,       // Scale to fit screen
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: window.innerWidth,     // Full browser width
+        height: window.innerHeight    // Full browser height
+    },
     backgroundColor: '#87CEEB', // sky blue background
     physics: {
         default: 'arcade',
@@ -56,3 +60,4 @@ function update() {
         player.setVelocityY(-330);
     }
 }
+
