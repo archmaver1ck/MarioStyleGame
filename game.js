@@ -6,19 +6,12 @@ const config = {
         width: window.innerWidth,     // Full browser width
         height: window.innerHeight    // Full browser height
     },
-    backgroundColor: '#87CEEB', // sky blue background
+    backgroundColor: '#87CEEB',
     physics: {
         default: 'arcade',
-        arcade: {
-            gravity: { y: 500 }, // gravity pulls player down
-            debug: false
-        }
+        arcade: { gravity: { y: 500 } }
     },
-    scene: {
-        preload,
-        create,
-        update
-    }
+    scene: { preload, create, update }
 };
 
 const game = new Phaser.Game(config);
@@ -60,4 +53,5 @@ function update() {
         player.setVelocityY(-330);
     }
 }
+
 
