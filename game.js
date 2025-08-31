@@ -48,6 +48,7 @@ function create() {
     mushroom.setVelocityX(50);
     mushroom.setBounce(1, 0);
     mushroom.body.allowGravity = true;
+    mushroom.setSize(mushroom.width, mushroom.height);
 
     this.physics.add.collider(enemies, platforms);
     this.physics.add.collider(player, enemies, hitEnemy, null, this);
