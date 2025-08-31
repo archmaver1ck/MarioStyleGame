@@ -55,7 +55,40 @@ function create() {
     // Add collision between player and obstacles
     this.physics.add.collider(player, obstacles);
 
+    let graphics = this.add.graphics();
+    graphics.fillStyle(0xff0000, 1);  // red color
+    graphics.fillRect(300, 300, 120, 30);  // x, y, width, height
+
+// Add physics body (so player can stand on it)
+    let floatingBlock = this.physics.add.staticImage(360, 315, null)
+        .setDisplaySize(120, 30)
+        .refreshBody();
+
+// Add collision with player
+    this.physics.add.collider(player, floatingBlock);
 }
+
+function respawnPlayer() {
+    player.setX(100);  // starting X
+    player.setY(450);  // starting Y
+    player.setVelocity(0, 0); // stop falling momentum
+}
+
+makePlatform(this, 200, 400, 100, 30);
+makePlatform(this, 500, 250, 150, 30);
+
+function makePlatform(scene, x, y, w, h) {
+    let g = scene.add.graphics();
+    g.fillStyle(0x00ff00, 1);
+    g.fillRect(x, y, w, h);
+
+    let block = scene.physics.add.staticImage(x + w/2, y + h/2, null)
+        .setDisplaySize(w, h)
+        .refreshBody();
+
+    scene.physics.add.collider(player, block);
+}
+
 
 function update() {
     if (this.cursors.left.isDown) {
@@ -69,5 +102,11 @@ function update() {
     if (this.cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-330);
     }
+
+    if (player.y > 600) {   // adjust 600 if your game height is different
+        respawnPlayer();
+    }
+    
 }
+
 
