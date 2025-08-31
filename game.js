@@ -1,10 +1,10 @@
 const config = {
     type: Phaser.AUTO,
     scale: {
-        mode: Phaser.Scale.FIT,       // Scale to fit screen
+        mode: Phaser.Scale.FIT,     
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        width: window.innerWidth,     // Full browser width
-        height: window.innerHeight    // Full browser height
+        width: window.innerWidth,     
+        height: window.innerHeight    
     },
     backgroundColor: '#87CEEB',
     physics: {
@@ -18,60 +18,76 @@ const game = new Phaser.Game(config);
 let player;
 
 function preload() {
-    // Load placeholder sprites from Phaser’s asset CDN
     this.load.image('player', 'https://labs.phaser.io/assets/sprites/phaser-dude.png');
     this.load.image('ground', 'https://labs.phaser.io/assets/sprites/platform.png');
 }
-
+let enemies;
 function create() {
-    // Add ground
+    
     const ground = this.physics.add.staticGroup();
     ground.create(400, 580, 'ground').setScale(2).refreshBody();
-
-    // Add player
     player = this.physics.add.sprite(100, 450, 'player');
-    player.setBounce(0.2); // little bounce when landing
-    player.setCollideWorldBounds(true); // prevent going off-screen
-
-    // Collisions
+    player.setBounce(0.2); 
+    player.setCollideWorldBounds(true); 
     this.physics.add.collider(player, ground);
-
-    // Controls
     this.cursors = this.input.keyboard.createCursorKeys();
-
-    // existing code...
     this.add.text(20, 20, "Use arrow keys to move", { font: "20px Arial", fill: "#000" });
-
-    // Create a group of obstacles
     obstacles = this.physics.add.staticGroup();
-
-    // Example: add one obstacle (a block)
     obstacles.create(400, 500, null)
-        .setDisplaySize(100, 50)   // width=100, height=50
+        .setDisplaySize(100, 50)   
         .setOrigin(0, 0)
         .refreshBody()
-        .setFillStyle ? null : null; // ignore (Phaser quirk, we’ll color it differently)
+        .setFillStyle ? null : null; 
 
-    // Add collision between player and obstacles
     this.physics.add.collider(player, obstacles);
 
     let graphics = this.add.graphics();
-    graphics.fillStyle(0xff0000, 1);  // red color
-    graphics.fillRect(300, 300, 120, 30);  // x, y, width, height
-
-// Add physics body (so player can stand on it)
+    graphics.fillStyle(0xff0000, 1);  
+    graphics.fillRect(300, 300, 120, 30);  
     let floatingBlock = this.physics.add.staticImage(360, 315, null)
         .setDisplaySize(120, 30)
         .refreshBody();
-
-// Add collision with player
     this.physics.add.collider(player, floatingBlock);
+
+    this.physics.world.setBounds(0, 0, 2000, 600);  
+    this.cameras.main.setBounds(0, 0, 2000, 600);
+    this.cameras.main.startFollow(player, true, 0.08, 0.08);
+
+    platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+    for (let x = 0; x < 2000; x += 64) {
+        platforms.create(x, 568, 'ground').setScale(2).refreshBody();
+    }
+    for (let x = 0; x < 2000; x += 64) {
+        if ((x > 600 && x < 800) || (x > 1200 && x < 1400)) {
+            continue; 
+        }
+        platforms.create(x, 568, 'ground').setScale(2).refreshBody();
+    }
+
+    enemies = this.physics.add.group();
+
+    
+    let mushroom = enemies.create(500, 500, 'mushroom');
+    mushroom.setCollideWorldBounds(true);
+    mushroom.setVelocityX(50);   
+    mushroom.setBounce(1, 0);   
+    mushroom.body.allowGravity = true;
+
+    
+    this.physics.add.collider(enemies, platforms);
+
+    
+    this.physics.add.collider(player, enemies, hitEnemy, null, this);
+}
+
+function hitEnemy(player, enemy) {
+    respawnPlayer();  
 }
 
 function respawnPlayer() {
-    player.setX(100);  // starting X
-    player.setY(450);  // starting Y
-    player.setVelocity(0, 0); // stop falling momentum
+    player.setX(100);  
+    player.setY(450);  
+    player.setVelocity(0, 0);
 }
 
 makePlatform(this, 200, 400, 100, 30);
@@ -103,10 +119,11 @@ function update() {
         player.setVelocityY(-330);
     }
 
-    if (player.y > 600) {   // adjust 600 if your game height is different
+    if (player.y > 600) {   
         respawnPlayer();
     }
     
 }
+
 
 
