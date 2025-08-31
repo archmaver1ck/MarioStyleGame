@@ -38,6 +38,23 @@ function create() {
 
     // Controls
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    // existing code...
+    this.add.text(20, 20, "Use arrow keys to move", { font: "20px Arial", fill: "#000" });
+
+    // Create a group of obstacles
+    obstacles = this.physics.add.staticGroup();
+
+    // Example: add one obstacle (a block)
+    obstacles.create(400, 500, null)
+        .setDisplaySize(100, 50)   // width=100, height=50
+        .setOrigin(0, 0)
+        .refreshBody()
+        .setFillStyle ? null : null; // ignore (Phaser quirk, we’ll color it differently)
+
+    // Add collision between player and obstacles
+    this.physics.add.collider(player, obstacles);
+
 }
 
 function update() {
@@ -53,5 +70,4 @@ function update() {
         player.setVelocityY(-330);
     }
 }
-
 
