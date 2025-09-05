@@ -31,7 +31,7 @@ function create() {
     }
 
     player = this.physics.add.sprite(100, 450, 'player');
-    player.setScale(0.1);
+    player.setScale(0.07);
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
 
@@ -97,6 +97,7 @@ function update() {
         respawnPlayer();
     }
 }
+
 
 
 
