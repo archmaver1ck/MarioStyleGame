@@ -30,7 +30,8 @@ function create() {
         platforms.create(x, 568, 'ground').setScale(2).refreshBody();
     }
 
-    player = this.physics.add.sprite(10, 45, 'player');
+    player = this.physics.add.sprite(100, 450, 'player');
+    player.setScale(0.01);
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
 
@@ -96,5 +97,6 @@ function update() {
         respawnPlayer();
     }
 }
+
 
 
