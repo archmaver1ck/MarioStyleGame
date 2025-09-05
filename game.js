@@ -18,7 +18,7 @@ const game = new Phaser.Game(config);
 let player, cursors, platforms, enemies;
 
 function preload() {
-    this.load.image('player', 'https://labs.phaser.io/assets/sprites/phaser-dude.png');
+    this.load.image('player', 'photo.jpg');
     this.load.image('ground', 'https://labs.phaser.io/assets/sprites/platform.png');
     this.load.image('mushroom', 'https://labs.phaser.io/assets/sprites/mushroom2.png');
 }
@@ -96,3 +96,4 @@ function update() {
         respawnPlayer();
     }
 }
+
