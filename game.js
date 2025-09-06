@@ -26,7 +26,6 @@ function preload() {
     this.load.image('peach', 'https://labs.phaser.io/assets/sprites/peach.png');
     this.load.image('flag', 'https://labs.phaser.io/assets/sprites/flag.png');
     this.load.image('coin', 'waffle.png');
-
 }
 
 function create() {
@@ -39,7 +38,7 @@ function create() {
     let p1 = platforms.create(800, 400, 'ground').setScale(0.5).refreshBody();
     let p2 = platforms.create(1500, 350, 'ground').setScale(0.5).refreshBody();
     let p3 = platforms.create(2100, 300, 'ground').setScale(0.5).refreshBody();
- 
+
     player = this.physics.add.sprite(100, 450, 'player');
     player.setScale(0.05);
     player.setBounce(0.0001);
@@ -48,8 +47,9 @@ function create() {
 
     peach = this.physics.add.staticSprite(2900, 500, 'peach').setScale(0.2);
     flag = this.physics.add.staticSprite(2950, 500, 'flag').setScale(0.2);
-    this.physics.add.collider(player, peach, winGame, null, this);
-    this.physics.add.collider(player, flag, winGame, null, this);
+
+    this.physics.add.overlap(player, peach, winGame, null, this);
+    this.physics.add.overlap(player, flag, winGame, null, this);
 
     this.physics.world.setBounds(0, 0, 3000, 600);
     this.cameras.main.setBounds(0, 0, 3000, 600);
@@ -62,39 +62,29 @@ function create() {
     spawnMushroomOnPlatform(this, p2, -40);
     spawnMushroomOnPlatform(this, p3, 60);
 
-    this.physics.add.collider(player, peach, winGame, null, this);
-    this.physics.add.collider(player, enemies, stompEnemy, null, this);
-
     spawnMushroomOnFloatingPlatform(this, p1, 50);
     spawnMushroomOnFloatingPlatform(this, p2, -50);
     spawnMushroomOnFloatingPlatform(this, p3, 50);
 
-    peach = this.physics.add.staticSprite(2900, 500, 'peach').setScale(0.2);
-    flag = this.physics.add.staticSprite(2950, 500, 'flag').setScale(0.2);
-
-    this.physics.add.collider(player, peach, winGame, null, this);  
-    this.physics.add.collider(player, flag, winGame, null, this);
+    this.physics.add.collider(player, enemies, stompEnemy, null, this);
 
     coins = this.physics.add.group({
-    key: 'coin',
-    repeat: 10,
-    setXY: { x: 200, y: 0, stepX: 250 }
-    setScale: { x: 0.05, y: 0.05 }
+        key: 'coin',
+        repeat: 10,
+        setXY: { x: 200, y: 0, stepX: 250 },
+        setScale: { x: 0.05, y: 0.05 }
     });
 
     coins.children.iterate(coin => {
-    
-    coin.setBounceY(Phaser.Math.FloatBetween(0.2, 0.5));
+        coin.setBounceY(Phaser.Math.FloatBetween(0.2, 0.5));
     });
 
     this.physics.add.collider(coins, platforms);
     this.physics.add.overlap(player, coins, collectCoin, null, this);
 
     scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '24px', fill: '#000' });
-    scoreText.setScrollFactor(0); 
+    scoreText.setScrollFactor(0);
 }
-
-
 
 function spawnMushroomOnPlatform(scene, platform, speed) {
     let x = platform.x;
@@ -134,6 +124,7 @@ function stompEnemy(player, enemy) {
     if (player.body.velocity.y > 0 || playerBottom <= enemyTop + 10) {
         enemy.destroy(); 
         player.setVelocityY(-250); 
+        score += 10;
     } else {
         respawnPlayer(); 
     }
@@ -177,4 +168,3 @@ function update() {
         }
     });
 }
-
