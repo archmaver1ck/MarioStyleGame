@@ -51,7 +51,7 @@ function create() {
     peach = this.physics.add.staticImage(4450, 500, 'peach')
         .setScale(0.05)
         .setOrigin(0.5, 1);
-    peach.body.setSize(peach.displayWidth, peach.displayHeight, true);
+    peach.body.setSize(peach.displayWidth*1.2, peach.displayHeight*1.5, true);
 
     this.physics.add.overlap(player, peach, winGame, null, this);
 
@@ -168,3 +168,4 @@ function update() {
         }
     });
 }
+
