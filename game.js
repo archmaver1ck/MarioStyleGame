@@ -49,7 +49,7 @@ function create() {
 
     
     player = this.physics.add.sprite(100, 450, 'player');
-    player.setScale(1);
+    player.setScale(0.5);
     player.setBounce(0.0001);
     player.setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
@@ -175,3 +175,4 @@ function update() {
         }
     });
 }
+
