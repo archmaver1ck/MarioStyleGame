@@ -49,7 +49,7 @@ function create() {
 
     
     player = this.physics.add.sprite(100, 450, 'player');
-    player.setScale(0.1);
+    player.setScale(0.07);
     player.setBounce(0.0001);
     player.setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
@@ -77,7 +77,7 @@ function create() {
     key: 'coin',
     repeat: 10,
     setXY: { x: 200, y: 0, stepX: 180 },
-    setScale: { x: 0.1, y: 0.1 }
+    setScale: { x: 0.07, y: 0.07 }
     });
 
     coins.children.iterate(coin => {
@@ -176,5 +176,6 @@ function update() {
         }
     });
 }
+
 
 
