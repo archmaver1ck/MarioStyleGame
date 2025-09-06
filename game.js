@@ -27,6 +27,7 @@ function preload() {
     this.load.image('flag', 'https://labs.phaser.io/assets/sprites/flag.png');
     this.load.image('coin', 'waffle.png');
 }
+
 function create() {
     platforms = this.physics.add.staticGroup();
     for (let x = 0; x < 4500; x += 64) {
@@ -47,7 +48,10 @@ function create() {
     player.setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
 
-    peach = this.physics.add.staticSprite(4350, 500, 'peach').setScale(0.05);
+    // ✅ Peach fixed
+    peach = this.physics.add.staticImage(4350, 500, 'peach')
+        .setScale(0.05)
+        .setOrigin(0.5, 1); 
     this.physics.add.overlap(player, peach, winGame, null, this);
 
     this.physics.world.setBounds(0, 0, 4500, 600);
@@ -81,8 +85,6 @@ function create() {
     scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '24px', fill: '#000' });
     scoreText.setScrollFactor(0);
 }
-
-
 
 function spawnMushroomOnPlatform(scene, platform, speed) {
     let x = platform.x;
@@ -127,7 +129,6 @@ function stompEnemy(player, enemy) {
         respawnPlayer();
     }
 }
-
 
 function respawnPlayer() {
     player.setX(100);
