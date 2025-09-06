@@ -41,7 +41,7 @@ function create() {
     let p3 = platforms.create(2100, 300, 'ground').setScale(0.5).refreshBody();
  
     player = this.physics.add.sprite(100, 450, 'player');
-    player.setScale(1);
+    player.setScale(0.05);
     player.setBounce(0.0001);
     player.setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
@@ -79,9 +79,11 @@ function create() {
     key: 'coin',
     repeat: 10,
     setXY: { x: 200, y: 0, stepX: 250 }
+    setScale: { x: 0.05, y: 0.05 }
     });
 
     coins.children.iterate(coin => {
+    
     coin.setBounceY(Phaser.Math.FloatBetween(0.2, 0.5));
     });
 
@@ -175,3 +177,4 @@ function update() {
         }
     });
 }
+
