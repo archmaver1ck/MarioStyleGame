@@ -30,30 +30,26 @@ function preload() {
 }
 
 function create() {
-    //platforms = this.physics.add.staticGroup();
-    // for (let x = 0; x < 3000; x += 64) {
-    //     if ((x > 400 && x < 600) || (x > 1000 && x < 1200) || (x > 1600 && x < 1800) || (x > 2200 && x < 2400)) {
-    //         continue;
-    //     }
-    //     platforms.create(x, 568, 'ground').setScale(2).refreshBody();
-    // }
     platforms = this.physics.add.staticGroup();
     for (let x = 0; x < 3000; x += 64) {
-    if (Math.random() < 0.1) continue;
-    platforms.create(x, 568, 'ground').setScale(2).refreshBody();
-}
+        if (Math.random() < 0.1) continue;
+        platforms.create(x, 568, 'ground').setScale(2).refreshBody();
+    }
 
     let p1 = platforms.create(800, 400, 'ground').setScale(0.5).refreshBody();
     let p2 = platforms.create(1500, 350, 'ground').setScale(0.5).refreshBody();
     let p3 = platforms.create(2100, 300, 'ground').setScale(0.5).refreshBody();
-
-    
+ 
     player = this.physics.add.sprite(100, 450, 'player');
-    player.setScale(0.04);
+    player.setScale(1);
     player.setBounce(0.0001);
     player.setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
-    
+
+    peach = this.physics.add.staticSprite(2900, 500, 'peach').setScale(0.2);
+    flag = this.physics.add.staticSprite(2950, 500, 'flag').setScale(0.2);
+    this.physics.add.collider(player, peach, winGame, null, this);
+    this.physics.add.collider(player, flag, winGame, null, this);
 
     this.physics.world.setBounds(0, 0, 3000, 600);
     this.cameras.main.setBounds(0, 0, 3000, 600);
@@ -73,11 +69,16 @@ function create() {
     spawnMushroomOnFloatingPlatform(this, p2, -50);
     spawnMushroomOnFloatingPlatform(this, p3, 50);
 
+    peach = this.physics.add.staticSprite(2900, 500, 'peach').setScale(0.2);
+    flag = this.physics.add.staticSprite(2950, 500, 'flag').setScale(0.2);
+
+    this.physics.add.collider(player, peach, winGame, null, this);  
+    this.physics.add.collider(player, flag, winGame, null, this);
+
     coins = this.physics.add.group({
     key: 'coin',
     repeat: 10,
-    setXY: { x: 200, y: 0, stepX: 180 },
-    setScale: { x: 0.04, y: 0.04 }
+    setXY: { x: 200, y: 0, stepX: 250 }
     });
 
     coins.children.iterate(coin => {
@@ -85,9 +86,7 @@ function create() {
     });
 
     this.physics.add.collider(coins, platforms);
-
     this.physics.add.overlap(player, coins, collectCoin, null, this);
-
 
     scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '24px', fill: '#000' });
     scoreText.setScrollFactor(0); 
@@ -176,7 +175,3 @@ function update() {
         }
     });
 }
-
-
-
-
