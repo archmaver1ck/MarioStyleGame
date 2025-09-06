@@ -48,10 +48,11 @@ function create() {
     player.setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
 
-    // ✅ Peach fixed
-    peach = this.physics.add.staticImage(4350, 500, 'peach')
+    peach = this.physics.add.staticImage(4450, 500, 'peach')
         .setScale(0.05)
-        .setOrigin(0.5, 1); 
+        .setOrigin(0.5, 1);
+    peach.body.setSize(peach.displayWidth, peach.displayHeight, true);
+
     this.physics.add.overlap(player, peach, winGame, null, this);
 
     this.physics.world.setBounds(0, 0, 4500, 600);
@@ -137,7 +138,7 @@ function respawnPlayer() {
 }
 
 function winGame() {
-    alert("🎉 You reached Peach! You Win! 🎉");
+    alert("🎉 HAPPPYYY BIRTHHHDAYYY MANONIIII! 🎉");
     game.scene.pause('default');
 }
 
