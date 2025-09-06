@@ -73,7 +73,7 @@ function create() {
         key: 'coin',
         repeat: 25,
         setXY: { x: 200, y: 0, stepX: 160 },
-        setScale: { x: 0.05, y: 0.05 }
+        setScale: { x: 0.1, y: 0.1 }
     });
 
     coins.children.iterate(coin => {
@@ -169,3 +169,4 @@ function update() {
         }
     });
 }
+
