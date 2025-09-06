@@ -16,11 +16,11 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-let player, cursors, platforms, enemies, peach, flag;
+let player, cursors, platforms, enemies, peach;
 let coins, score = 0, scoreText;
 
 function preload() {
-    this.load.image('player', 'photo.jpg');
+    this.load.image('player', 'photo.png');
     this.load.image('ground', 'https://labs.phaser.io/assets/sprites/platform.png');
     this.load.image('mushroom', 'https://labs.phaser.io/assets/sprites/mushroom2.png');
     this.load.image('peach', 'peach.jpg');
@@ -43,15 +43,15 @@ function create() {
     floating.push(platforms.create(3500, 410, 'ground').setScale(0.5).refreshBody());
 
     player = this.physics.add.sprite(100, 450, 'player');
-    player.setScale(0.05);
+    player.setScale(0.1);
     player.setBounce(0.0001);
     player.setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
 
     peach = this.physics.add.staticImage(4450, 500, 'peach')
         .setScale(0.05)
-        .setOrigin(0.5, 1);
-    peach.body.setSize(peach.displayWidth*2, peach.displayHeight*2, true);
+        .setOrigin(0.5, 1)
+        .refreshBody();
 
     this.physics.add.overlap(player, peach, winGame, null, this);
 
@@ -67,7 +67,7 @@ function create() {
         spawnMushroomOnFloatingPlatform(this, p, i % 2 === 0 ? -60 : 60);
     });
 
-    this.physics.add.collider(player, enemies, stompEnemy, null, this);
+    this.physics.add.overlap(player, enemies, stompEnemy, null, this);
 
     coins = this.physics.add.group({
         key: 'coin',
@@ -119,9 +119,10 @@ function collectCoin(player, coin) {
 }
 
 function stompEnemy(player, enemy) {
-    let playerBottom = player.y + player.displayHeight / 2;
-    let enemyTop = enemy.y - enemy.displayHeight / 2;
-    if (playerBottom < enemyTop + 20 || player.body.velocity.y > 0) {
+    let playerBottom = player.body.bottom;
+    let enemyTop = enemy.body.top;
+
+    if (playerBottom <= enemyTop + 5 && player.body.velocity.y > 0) {
         enemy.destroy();
         player.setVelocityY(-300);
         score += 10;
@@ -168,6 +169,3 @@ function update() {
         }
     });
 }
-
-
-
