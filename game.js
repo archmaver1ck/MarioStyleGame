@@ -23,21 +23,23 @@ function preload() {
     this.load.image('player', 'photo.jpg');
     this.load.image('ground', 'https://labs.phaser.io/assets/sprites/platform.png');
     this.load.image('mushroom', 'https://labs.phaser.io/assets/sprites/mushroom2.png');
-    this.load.image('peach', 'https://labs.phaser.io/assets/sprites/peach.png');
+    this.load.image('peach', 'peach.jpg');
     this.load.image('flag', 'https://labs.phaser.io/assets/sprites/flag.png');
     this.load.image('coin', 'waffle.png');
 }
-
 function create() {
     platforms = this.physics.add.staticGroup();
-    for (let x = 0; x < 3000; x += 64) {
-        if (Math.random() < 0.1) continue;
+    for (let x = 0; x < 4500; x += 64) {
+        if (Math.random() < 0.15) continue;
         platforms.create(x, 568, 'ground').setScale(2).refreshBody();
     }
 
-    let p1 = platforms.create(800, 400, 'ground').setScale(0.5).refreshBody();
-    let p2 = platforms.create(1500, 350, 'ground').setScale(0.5).refreshBody();
-    let p3 = platforms.create(2100, 300, 'ground').setScale(0.5).refreshBody();
+    let floating = [];
+    floating.push(platforms.create(800, 350, 'ground').setScale(0.5).refreshBody());
+    floating.push(platforms.create(1500, 390, 'ground').setScale(0.5).refreshBody());
+    floating.push(platforms.create(2100, 380, 'ground').setScale(0.5).refreshBody());
+    floating.push(platforms.create(2800, 450, 'ground').setScale(0.5).refreshBody());
+    floating.push(platforms.create(3500, 410, 'ground').setScale(0.5).refreshBody());
 
     player = this.physics.add.sprite(100, 450, 'player');
     player.setScale(0.05);
@@ -45,33 +47,27 @@ function create() {
     player.setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
 
-    peach = this.physics.add.staticSprite(2900, 500, 'peach').setScale(0.2);
-    flag = this.physics.add.staticSprite(2950, 500, 'flag').setScale(0.2);
-
+    peach = this.physics.add.staticSprite(4350, 500, 'peach').setScale(0.05);
     this.physics.add.overlap(player, peach, winGame, null, this);
-    this.physics.add.overlap(player, flag, winGame, null, this);
 
-    this.physics.world.setBounds(0, 0, 3000, 600);
-    this.cameras.main.setBounds(0, 0, 3000, 600);
+    this.physics.world.setBounds(0, 0, 4500, 600);
+    this.cameras.main.setBounds(0, 0, 4500, 600);
     this.cameras.main.startFollow(player, true, 0.08, 0.08);
 
     cursors = this.input.keyboard.createCursorKeys();
 
     enemies = this.physics.add.group();
-    spawnMushroomOnPlatform(this, p1, 40);
-    spawnMushroomOnPlatform(this, p2, -40);
-    spawnMushroomOnPlatform(this, p3, 60);
-
-    spawnMushroomOnFloatingPlatform(this, p1, 50);
-    spawnMushroomOnFloatingPlatform(this, p2, -50);
-    spawnMushroomOnFloatingPlatform(this, p3, 50);
+    floating.forEach((p, i) => {
+        spawnMushroomOnPlatform(this, p, i % 2 === 0 ? 50 : -50);
+        spawnMushroomOnFloatingPlatform(this, p, i % 2 === 0 ? -60 : 60);
+    });
 
     this.physics.add.collider(player, enemies, stompEnemy, null, this);
 
     coins = this.physics.add.group({
         key: 'coin',
-        repeat: 10,
-        setXY: { x: 200, y: 0, stepX: 250 },
+        repeat: 25,
+        setXY: { x: 200, y: 0, stepX: 160 },
         setScale: { x: 0.05, y: 0.05 }
     });
 
@@ -85,6 +81,8 @@ function create() {
     scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '24px', fill: '#000' });
     scoreText.setScrollFactor(0);
 }
+
+
 
 function spawnMushroomOnPlatform(scene, platform, speed) {
     let x = platform.x;
@@ -117,16 +115,16 @@ function collectCoin(player, coin) {
     scoreText.setText('Score: ' + score);
 }
 
-
 function stompEnemy(player, enemy) {
-    let playerBottom = player.y + player.height / 2;
-    let enemyTop = enemy.y - enemy.height / 2;
-    if (player.body.velocity.y > 0 || playerBottom <= enemyTop + 10) {
-        enemy.destroy(); 
-        player.setVelocityY(-250); 
+    let playerBottom = player.y + player.displayHeight / 2;
+    let enemyTop = enemy.y - enemy.displayHeight / 2;
+    if (playerBottom < enemyTop + 20 || player.body.velocity.y > 0) {
+        enemy.destroy();
+        player.setVelocityY(-300);
         score += 10;
+        scoreText.setText('Score: ' + score);
     } else {
-        respawnPlayer(); 
+        respawnPlayer();
     }
 }
 
