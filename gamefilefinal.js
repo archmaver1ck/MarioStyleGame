@@ -43,7 +43,7 @@ function create() {
     floating.push(platforms.create(3500, 410, 'ground').setScale(0.5).refreshBody());
 
     player = this.physics.add.sprite(100, 450, 'player');
-    player.setScale(0.01);
+    player.setScale(0.08);
     player.setBounce(0.0001);
     player.setCollideWorldBounds(true);
     this.physics.add.collider(player, platforms);
@@ -91,7 +91,7 @@ function spawnMushroomOnPlatform(scene, platform, speed) {
     let x = platform.x;
     let y = platform.y - platform.displayHeight / 2 - 16;
     let mushroom = enemies.create(x, y, 'mushroom');
-    mushroom.setScale(0.7);
+    mushroom.setScale(0.07);
     mushroom.setVelocityX(speed);
     mushroom.setBounce(1, 0);
     mushroom.setCollideWorldBounds(true);
@@ -169,5 +169,6 @@ function update() {
         }
     });
 }
+
 
 
